@@ -16,10 +16,11 @@ ENV P4ROOT=/metadata
 ENV P4NAME=myserver
 ENV P4JOURNAL=/journals/journal
 
-RUN mkdir /metadata && mkdir /library && mkdir /journals && mkdir /checkpoints
-VOLUME ["/metadata", "/library", "/journals", "/checkpoints"]
+RUN mkdir /metadata && mkdir /library && mkdir /journals && mkdir /backup
+VOLUME ["/metadata", "/library", "/journals", "/backup"]
 
 COPY docker-entrypoint.sh /
+WORKDIR /
 ENTRYPOINT ["/docker-entrypoint.sh"]
 CMD ["p4d"]
 

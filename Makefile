@@ -1,4 +1,4 @@
-.PHONY: image push run debug clean
+.PHONY: image push run debug clean nuke backup restore checkpoint
 
 export DOCKER_REPO ?= jtilander
 P4_VERSION ?= 16.2
@@ -30,7 +30,7 @@ debug:
 	docker run --rm -it $(VOLUMES) $(DOCKER_REPO)/p4d:$(TAG) bash
 
 clean:
-	rm -rf $DATAVOLUMES && mkdir $DATAVOLUMES
+	rm -rf $(DATAVOLUMES) && mkdir $(DATAVOLUMES)
 
 checkpoint:
 	docker run --rm $(VOLUMES) $(DOCKER_REPO)/p4d:$(TAG) checkpoint
@@ -42,7 +42,8 @@ restore:
 	docker run --rm $(VOLUMES) $(DOCKER_REPO)/p4d:$(TAG) restore checkpoint.gz
 
 nuke: clean
-	docker rmi `docker images -q -a $(DOCKER_REPO)/p4d:$(TAG)`
+	-docker rm -f `docker ps -q -a -f ancestor=$(DOCKER_REPO)/p4d:$(TAG)`
+	-docker rmi -f `docker images -q -a $(DOCKER_REPO)/p4d:$(TAG)`
 
 up:
 	$(DC) $(DC_FLAGS) up -d && $(DC) $(DC_FLAGS) logs -f

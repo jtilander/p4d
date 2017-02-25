@@ -1,0 +1,37 @@
+version: '2'
+services:
+  server:
+    image: ${DOCKER_REPO}/p4d:${TAG}
+    restart: always
+    hostname: server
+    environment:
+      - "P4PORT=1666"
+    volumes:
+      - "serverdata:/metadata"
+      - "serverlibrary:/library"
+      - "serverjournals:/journals"
+      - "servercheckpoints:/checkpoints"
+    ports:
+      - "1666:1666"
+    networks:
+      perforce0:
+        ipv4_address: 172.99.0.200
+    logging:
+      options:
+        max-size: "1m"
+        max-file: "2"
+
+volumes:
+  serverdata:
+  serverlibrary:
+  servercheckpoints:
+  serverjournals:
+
+
+networks:
+  perforce0:
+    ipam:
+      config:
+        - subnet: '172.99.0.0/16'
+          ip_range: '172.99.0.0/16'
+          gateway: '172.99.0.1'

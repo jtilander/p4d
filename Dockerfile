@@ -4,7 +4,7 @@ RUN apk add --no-cache \
 		bash \
 		curl
 
-ADD bin/lib-x64.tgz /
+ADD lib/lib-x64.tgz /
 
 ARG P4_VERSION=16.2
 RUN curl -sSL -O http://cdist2.perforce.com/perforce/r${P4_VERSION}/bin.linux26x86_64/p4 && mv p4 /usr/bin/p4 && chmod +x /usr/bin/p4
